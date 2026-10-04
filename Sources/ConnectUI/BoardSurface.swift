@@ -9,6 +9,9 @@ struct BoardSurface: View, Equatable {
     var interactive = false
     var identifier = "demo"
     var onDrop: (Int) -> Void = { _ in }
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var fallingMove: Move?
+    @State private var fallOffset: CGFloat = 0
 
     static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.board == rhs.board && lhs.lastMove == rhs.lastMove &&
@@ -28,7 +31,7 @@ struct BoardSurface: View, Equatable {
                         let rect = CGRect(x: center.x - diameter / 2, y: center.y - diameter / 2,
                                           width: diameter, height: diameter)
                         let path = Path(ellipseIn: rect)
-                        if let player = board.cells[index] {
+                        if let player = board.cells[index], fallingMove?.index != index {
                             context.fill(path, with: .linearGradient(
                                 Gradient(colors: [player.color, player.color.opacity(0.8)]),
                                 startPoint: CGPoint(x: center.x, y: rect.minY),
@@ -55,7 +58,7 @@ struct BoardSurface: View, Equatable {
                         if board.outcome.winningCells.contains(index) {
                             context.stroke(Path(ellipseIn: rect.insetBy(dx: 2, dy: 2)),
                                            with: .color(.white), lineWidth: 2)
-                        } else if lastMove?.index == index {
+                        } else if lastMove?.index == index && fallingMove == nil {
                             context.stroke(Path(ellipseIn: rect.insetBy(dx: 2, dy: 2)),
                                            with: .color(.white.opacity(0.7)), lineWidth: 1.5)
                         }
@@ -63,6 +66,17 @@ struct BoardSurface: View, Equatable {
                 }
             }
             .accessibilityHidden(true)
+            if let move = fallingMove {
+                Circle().fill(move.player.color.gradient)
+                    .overlay {
+                        Image(systemName: move.player.symbol)
+                            .font(.system(size: cell * 0.15)).foregroundStyle(Palette.background.opacity(0.4))
+                    }
+                    .frame(width: cell * 0.77, height: cell * 0.77)
+                    .position(x: cell * (Double(move.column) + 0.5),
+                              y: cell * (Double(move.row) + 0.5))
+                    .offset(y: fallOffset).accessibilityHidden(true)
+            }
             if interactive {
                 HStack(spacing: 0) {
                     ForEach(0..<7, id: \.self) { column in
@@ -76,6 +90,16 @@ struct BoardSurface: View, Equatable {
                         .accessibilityHint("Drop a \(board.turn.name) piece in this column")
                         .accessibilityIdentifier("\(identifier)-column-\(column)")
                     }
+                }
+            }
+            Color.clear.allowsHitTesting(false).onChange(of: lastMove) { _, newMove in
+                guard let move = newMove, !reduceMotion else { fallingMove = nil; return }
+                fallingMove = move
+                fallOffset = -cell * CGFloat(move.row + 1)
+                withAnimation(.spring(response: 0.28, dampingFraction: 0.78)) { fallOffset = 0 }
+                Task { @MainActor in
+                    try? await Task.sleep(for: .milliseconds(400))
+                    if fallingMove == move { fallingMove = nil }
                 }
             }
         }
