@@ -54,6 +54,7 @@ struct PreviewMain {
         let game = GameStore(preview: session)
         try render(AppSnapshot(store: game, playing: true), name: "four-boards.png", width: 390, height: 844)
         try render(AppSnapshot(store: game, playing: true), name: "tablet.png", width: 820, height: 1180)
+        try render(AppSnapshot(store: game, playing: true), name: "landscape.png", width: 844, height: 390)
         try render(AppIconView(), name: "app-icon.png", width: 1024, height: 1024, scale: 1)
     }
 }

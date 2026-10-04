@@ -11,10 +11,24 @@ struct GameScreen: View {
 
     var body: some View {
         GeometryReader { screen in
+        let landscape = screen.size.width > screen.size.height
+        let compactWide = landscape && screen.size.height < 500
+        let columns = landscape ? session.rounds.count : (session.rounds.count == 1 ? 1 : 2)
+        let contentLimit: CGFloat = landscape ? 1100 : 850
+        let width = min(contentLimit - 40, screen.size.width - 40)
+        let heightLimitedWidth = CGFloat(columns) * max(130, (screen.size.height - 190) * 7 / 6) + CGFloat(columns - 1) * 12
+        let gridWidth = compactWide ? min(width, heightLimitedWidth) : width
         VStack(spacing: 0) {
             HStack {
                 Wordmark()
                 Spacer()
+                if compactWide {
+                    Text(session.mode == .online ? "YOU: \(store.online.localPlayer.name.uppercased())" : session.mode.title.uppercased())
+                        .font(.system(size: 10, weight: .bold, design: .monospaced)).foregroundStyle(Palette.muted)
+                    Text("\(session.wins(for: .coral))–\(session.wins(for: .gold))")
+                        .font(.system(size: 18, weight: .black, design: .rounded))
+                        .accessibilityLabel("Coral \(session.wins(for: .coral)), Gold \(session.wins(for: .gold)) boards won")
+                }
                 Button { showingRules = true } label: {
                     Image(systemName: "questionmark.circle").frame(width: 44, height: 44)
                 }.accessibilityLabel("How to play")
@@ -25,7 +39,8 @@ struct GameScreen: View {
             }.padding(.horizontal, 20).padding(.top, 8)
 
             ScrollView {
-                VStack(alignment: .leading, spacing: 18) {
+                VStack(alignment: .leading, spacing: compactWide ? 12 : 18) {
+                    if !compactWide {
                     HStack(alignment: .center) {
                         VStack(alignment: .leading, spacing: 5) {
                             Eyebrow(text: session.mode == .online ? "ONLINE · YOU ARE \(store.online.localPlayer.name.uppercased())" : (session.mode == .solo ? "YOU ARE CORAL" : "TWO PLAYERS · ONE DEVICE"))
@@ -39,11 +54,11 @@ struct GameScreen: View {
                         }
                     }
                     ScoreStrip(session: session)
+                    }
                     Group {
                         // Each board remains useful at both phone and tablet widths.
-                        let columns = session.rounds.count == 1 ? 1 : 2
                         let gap: CGFloat = 12
-                        let cardWidth = (min(810, screen.size.width - 40) - CGFloat(columns - 1) * gap) / CGFloat(columns)
+                        let cardWidth = (gridWidth - CGFloat(columns - 1) * gap) / CGFloat(columns)
                         TimelineView(.animation(minimumInterval: 0.1, paused: snapshotTime != nil || session.finished || store.focusedBoard != nil)) { context in
                             LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: gap), count: columns), spacing: gap) {
                                 ForEach(session.rounds) { round in
@@ -58,7 +73,8 @@ struct GameScreen: View {
                                 }
                             }
                         }
-                    }.frame(height: gridHeight(width: min(810, screen.size.width - 40)))
+                    }.frame(width: gridWidth, height: gridHeight(width: gridWidth, columns: columns))
+                        .frame(maxWidth: .infinity)
                     if session.finished {
                         ResultsPanel(session: session, canRematch: session.mode != .online || store.online.isHost) { store.start() }
                     } else {
@@ -73,7 +89,7 @@ struct GameScreen: View {
                             Text("\(session.rounds.filter(\.finished).count)/\(session.rounds.count) finished")
                         }.font(.system(size: 10, weight: .medium, design: .monospaced)).foregroundStyle(Palette.muted)
                     }
-                }.padding(20).frame(maxWidth: 850).frame(maxWidth: .infinity)
+                }.padding(20).frame(maxWidth: contentLimit).frame(maxWidth: .infinity)
             }
         }
         }
@@ -89,8 +105,7 @@ struct GameScreen: View {
         }
     }
 
-    private func gridHeight(width availableWidth: CGFloat) -> CGFloat {
-        let columns = session.rounds.count == 1 ? 1 : 2
+    private func gridHeight(width availableWidth: CGFloat, columns: Int) -> CGFloat {
         let rows = Int(ceil(Double(session.rounds.count) / Double(columns)))
         let width = (availableWidth - CGFloat(columns - 1) * 12) / CGFloat(columns)
         return CGFloat(rows) * (width * 6 / 7 + 70) + CGFloat(rows - 1) * 12
@@ -198,6 +213,13 @@ struct Countdown: View {
 struct FocusedBoard: View {
     @Bindable var store: GameStore
     var body: some View {
+        GeometryReader { geometry in
+            if geometry.size.width > geometry.size.height { landscape(size: geometry.size) }
+            else { portrait }
+        }.foregroundStyle(Palette.ink).background(Palette.background).preferredColorScheme(.dark)
+    }
+
+    private var portrait: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
                 HStack {
@@ -232,6 +254,48 @@ struct FocusedBoard: View {
                 }
             }.padding(24).frame(maxWidth: 650).frame(maxWidth: .infinity)
         }.foregroundStyle(Palette.ink).background(Palette.background).preferredColorScheme(.dark)
+    }
+
+    @ViewBuilder private func landscape(size: CGSize) -> some View {
+        if let session = store.session,
+           let round = session.rounds.first(where: { $0.id == store.focusedBoard }) {
+            TimelineView(.animation(minimumInterval: 0.1, paused: round.finished)) { context in
+                HStack(spacing: 16) {
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Board \(round.id + 1)").font(.system(size: 23, weight: .black, design: .rounded))
+                        Button("All boards") { store.focusedBoard = nil }
+                            .foregroundStyle(Palette.lime).frame(minHeight: 44)
+                            .accessibilityIdentifier("close-focus")
+                        Text(round.board.outcome.winner.map { "\($0.name) wins!" } ?? (round.finished ? "Draw" : "\(round.board.turn.name)’s turn"))
+                            .font(.headline).foregroundStyle(round.board.turn.color)
+                        if !round.finished {
+                            Countdown(remaining: round.remaining(at: store.displayTime(context.date.timeIntervalSince1970)), duration: session.turnDuration)
+                        }
+                        Text("\(round.board.moveCount)").font(.caption).foregroundStyle(Palette.muted)
+                            .accessibilityLabel("\(round.board.moveCount) pieces played")
+                            .accessibilityIdentifier("focused-\(round.id)-moves")
+                        HStack(spacing: 5) {
+                            ForEach(session.rounds.filter { $0.id != round.id }) { other in
+                                Button { store.focusedBoard = other.id } label: {
+                                    Text("\(other.id + 1)").font(.headline)
+                                        .frame(width: 44, height: 44)
+                                        .background(Palette.surface, in: RoundedRectangle(cornerRadius: 10))
+                                }.buttonStyle(.plain).foregroundStyle(other.board.turn.color)
+                                    .accessibilityLabel("Switch to board \(other.id + 1)")
+                            }
+                        }
+                        Text("Other clocks stay live.").font(.system(size: 10)).foregroundStyle(Palette.muted)
+                    }.frame(width: 150, alignment: .leading)
+                    BoardSurface(board: round.board, lastMove: round.lastMove?.move,
+                                 interactive: !round.finished && !store.pendingBoards.contains(round.id)
+                                    && !(session.mode == .solo && round.board.turn == .gold)
+                                    && (session.mode != .online || round.board.turn == store.online.localPlayer),
+                                 identifier: "focused-\(round.id)",
+                                 onDrop: { store.drop(column: $0, boardID: round.id) })
+                        .equatable().frame(maxHeight: size.height - 28).frame(maxWidth: .infinity)
+                }.padding(14).frame(maxWidth: .infinity, maxHeight: .infinity)
+            }
+        }
     }
 }
 

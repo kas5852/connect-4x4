@@ -9,3 +9,8 @@ resource-*
 project-brief.json
 *.xcresult
 test-results/
+.env
+.env.*
+*.p8
+*.p12
+*.mobileprovision

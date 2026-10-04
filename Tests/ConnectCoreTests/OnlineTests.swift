@@ -29,6 +29,21 @@ final class OnlineTests: XCTestCase {
         XCTAssertTrue(game.isRestorable)
     }
 
+    func testFractionalEpochDeadlinesSurviveWireEncoding() throws {
+        let epoch = 1_791_076_497.20559
+        var game = Session(boardCount: 4, turnDuration: 12, mode: .online, now: epoch)
+        var rng = SeededGenerator(state: 2026)
+        game.submitMove(player: .coral, column: 3, boardID: 0, expectedMoveCount: 0,
+                        at: epoch + 1.123456, using: &rng)
+        game.submitMove(player: .gold, column: 2, boardID: 0, expectedMoveCount: 1,
+                        at: epoch + 2.987654, using: &rng)
+        var replica = OnlineReplica()
+        let packet = state(game, id: UUID(), revision: 1, sentAt: epoch + 3.5)
+        let wire = OnlinePacket.decode(try JSONEncoder().encode(packet))!
+        XCTAssertTrue(replica.accept(wire, receivedAt: epoch - 20))
+        XCTAssertEqual(replica.session?.rounds, game.rounds)
+    }
+
     func testReplicaRejectsOldForeignInvalidAndUnsupportedPackets() {
         let game = Session(boardCount: 4, turnDuration: 12, mode: .online, now: 100)
         let id = UUID()

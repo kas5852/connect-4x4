@@ -58,4 +58,4 @@ schemes:
     test:
       targets:
         - Connect4x4UITests
-      gatherCoverageData: true
+      gatherCoverageData: false

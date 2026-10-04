@@ -21,7 +21,7 @@ Tap a column to drop a piece. Connect four horizontally, vertically, or diagonal
 
 Every expired turn triggers a uniformly random move among legal columns. A tap at or after expiry is discarded if the timeout already advanced that board. The computer takes wins and blocks immediate threats, then favors the center; it is designed to play quickly rather than to be unbeatable.
 
-Expand any board for larger touch controls, or rotate into landscape for more room. Other timers continue while you focus a board or read the rules. **Stay in the app during online matches:** backgrounding or losing the connection ends the match for both players; there is no host migration or reconnect in this release. Offline matches save locally and resolve missed turns when you return, bounded by the remaining cells. The host is trusted for this casual game, and the wall clock is not an anti-cheat system.
+Portrait uses a 2×2 overview for four boards; landscape places them side by side so every game stays visible. Expand any board for larger touch controls, including a landscape focus layout. Other timers continue while you focus a board or read the rules. **Stay in the app during online matches:** backgrounding or losing the connection ends the match for both players; there is no host migration or reconnect in this release. Offline matches save locally and resolve missed turns when you return, bounded by the remaining cells. The host is trusted for this casual game, and the wall clock is not an anti-cheat system.
 
 ## Build on an iPhone or simulator
 
@@ -49,7 +49,7 @@ GitHub Actions selects an installed simulator, runs the engine suite and offline
 - `ConnectUI`: setup, game, focus, rules, score, and results screens. One task sleeps until the next move deadline or computer move. Countdown display refreshes at 10 Hz; unchanged Canvas boards sit behind an equatable boundary.
 - `ConnectUI/OnlineClient.swift`: Game Center authentication, invitations, two-player matchmaking, reliable packets, handshake retries, clock calibration, and connection lifecycle. The guest sends move intents and never runs its own timeout engine.
 - `Tests/ConnectCoreTests`: win directions, draws, gravity, full columns, deadline ties, independent clocks, catch-up, invalid saves, computer ownership, 10,000 randomized games, an online host/guest match, stale intents/packets, clock skew, and a catch-up benchmark.
-- `UITests`: setup for 1–4 boards, focused input, a complete four-board match, results/rematch, timeout moves, and the solo opponent.
+- `UITests`: setup for 1–4 boards, focused input, a complete four-board match, results/rematch, timeout moves, the solo opponent, and landscape overview/focus.
 
 Pieces have distinct center marks as well as colors. Each playable column exposes its stack to VoiceOver. Compact four-board columns on small portrait phones are narrower than a 44-point target; the focus view provides larger columns on standard-size phones. Rules and settings scroll at large text sizes. Physical-device frame time, energy use, VoiceOver usability, and real-world touch latency still need device verification before calling the app production-ready.
 

@@ -10,6 +10,10 @@ The online implementation is included in the iOS app. Apple's service requires a
 4. Create an App Store Connect app record with exactly that bundle identifier and enable Game Center for the app. This game does not use leaderboards or achievements, so it does not require those resources.
 5. Build the same app onto two iPhones/iPads. Sign into **different Game Center accounts** on the devices.
 
+Once the team is active, `python3 scripts/configure-apple.py --team YOURTEAMID --bundle-id io.github.kas5852.Connect4x4` sets both signing targets and regenerates the project. `--dry-run` previews the change. Sign into that team's Apple account in Xcode → Settings → Accounts so automatic provisioning can register the identifier and issue a development certificate. This script does not accept passwords, purchase membership, or submit an app for review.
+
+The app record can use **Connect 4x4**, primary language **English (US)**, platform **iOS**, and SKU **connect4x4-ios-2026**. Its bundle ID must exactly match the project. A privacy manifest declares app-local UserDefaults access for offline saves; the app has no custom analytics or data-retention service.
+
 Apple's [real-time game sample](https://developer.apple.com/documentation/gamekit/creating-real-time-games) and [Game Center configuration guide](https://developer.apple.com/documentation/gamekit/initializing-and-configuring-game-center) describe the service setup. This is separate from publishing source to GitHub.
 
 ## Two-device acceptance check

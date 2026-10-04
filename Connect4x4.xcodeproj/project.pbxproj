@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		12E527E1B5FBAB1051390F5F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0494C5AAA01F11CA8EC6D085 /* Assets.xcassets */; };
+		46FA0CEF4A41455B1CB3B23F /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = E17DD9DB347E28405CC5CB51 /* PrivacyInfo.xcprivacy */; };
 		4FB8E8A656C011791D3E8EC8 /* ConnectUI in Frameworks */ = {isa = PBXBuildFile; productRef = 5502D51863B61A2DA872C877 /* ConnectUI */; };
 		75993AA9F5514E1A8F88461F /* Connect4x4UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBABE2E23137A78753AF7AE /* Connect4x4UITests.swift */; };
 		C100913648B4FD7049F80A2F /* Connect4x4App.swift in Sources */ = {isa = PBXBuildFile; fileRef = B724D0C8E16E27BB04C320F2 /* Connect4x4App.swift */; };
@@ -30,6 +31,7 @@
 		92398FD964194BD111418521 /* Connect4x4UITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = Connect4x4UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		AC90E4E945E0EA487ACFBAC4 /* Connect4x4.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Connect4x4.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B724D0C8E16E27BB04C320F2 /* Connect4x4App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Connect4x4App.swift; sourceTree = "<group>"; };
+		E17DD9DB347E28405CC5CB51 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		FFBABE2E23137A78753AF7AE /* Connect4x4UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Connect4x4UITests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -78,6 +80,7 @@
 				0494C5AAA01F11CA8EC6D085 /* Assets.xcassets */,
 				5A2063D314CDDC17E3882C64 /* Connect4x4.entitlements */,
 				B724D0C8E16E27BB04C320F2 /* Connect4x4App.swift */,
+				E17DD9DB347E28405CC5CB51 /* PrivacyInfo.xcprivacy */,
 			);
 			path = App;
 			sourceTree = "<group>";
@@ -180,6 +183,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				12E527E1B5FBAB1051390F5F /* Assets.xcassets in Resources */,
+				46FA0CEF4A41455B1CB3B23F /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

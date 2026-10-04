@@ -83,6 +83,21 @@ final class Connect4x4UITests: XCTestCase {
         screenshot(app, name: "Autopilot after timeout")
     }
 
+    func testLandscapeKeepsAllBoardsVisibleAndFocusPlayable() {
+        defer { XCUIDevice.shared.orientation = .portrait }
+        let app = start()
+        XCUIDevice.shared.orientation = .landscapeLeft
+        XCTAssertTrue(app.staticTexts["board-3-moves"].waitForExistence(timeout: 5))
+        for board in 0..<4 { XCTAssertTrue(app.staticTexts["board-\(board)-moves"].isHittable) }
+        screenshot(app, name: "All four boards in landscape")
+        app.buttons["focus-board-0"].tap()
+        XCTAssertTrue(app.buttons["focused-0-column-3"].waitForExistence(timeout: 3))
+        app.buttons["focused-0-column-3"].tap()
+        XCTAssertEqual(app.staticTexts["focused-0-moves"].label, "1 pieces played")
+        screenshot(app, name: "Landscape focused controls")
+        app.buttons["close-focus"].tap()
+    }
+
     func testSoloComputerRespondsAndOtherBoardStaysIndependent() {
         let app = start(count: 2, solo: true)
         app.buttons["board-0-column-3"].tap()

@@ -103,6 +103,7 @@ struct BoardSurface: View, Equatable {
                 }
             }
         }
+        .clipped()
         .aspectRatio(7.0 / 6.0, contentMode: .fit)
         .padding(5)
         .background(Palette.board.gradient, in: RoundedRectangle(cornerRadius: 12))
