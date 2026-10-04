@@ -144,12 +144,12 @@
 				LastUpgradeCheck = 1600;
 				TargetAttributes = {
 					83DA434CBFE2B8D51B35C30F = {
-						DevelopmentTeam = "";
+						DevelopmentTeam = W9L94TVA42;
 						ProvisioningStyle = Automatic;
 						TestTargetID = D3FFEF820BDA279EA3405E86;
 					};
 					D3FFEF820BDA279EA3405E86 = {
-						DevelopmentTeam = "";
+						DevelopmentTeam = W9L94TVA42;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -280,7 +280,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = W9L94TVA42;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
@@ -319,7 +319,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.github.kas5852.Connect4x4UITests;
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.kas5852.Connect4x4.UITests;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = Connect4x4;
@@ -336,7 +336,7 @@
 					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.github.kas5852.Connect4x4UITests;
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.kas5852.Connect4x4.UITests;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				TEST_TARGET_NAME = Connect4x4;
@@ -406,7 +406,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = W9L94TVA42;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;

@@ -7,7 +7,7 @@ options:
 settings:
   base:
     SWIFT_VERSION: "5.0"
-    DEVELOPMENT_TEAM: ""
+    DEVELOPMENT_TEAM: "W9L94TVA42"
     CODE_SIGN_STYLE: Automatic
 packages:
   Connect4x4:
@@ -48,7 +48,7 @@ targets:
     settings:
       base:
         GENERATE_INFOPLIST_FILE: YES
-        PRODUCT_BUNDLE_IDENTIFIER: io.github.kas5852.Connect4x4UITests
+        PRODUCT_BUNDLE_IDENTIFIER: io.github.kas5852.Connect4x4.UITests
 schemes:
   Connect4x4:
     build:
