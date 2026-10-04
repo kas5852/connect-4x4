@@ -27,7 +27,7 @@ struct GameScreen: View {
                 VStack(alignment: .leading, spacing: 18) {
                     HStack(alignment: .center) {
                         VStack(alignment: .leading, spacing: 5) {
-                            Eyebrow(text: session.mode == .solo ? "YOU ARE CORAL" : "TWO PLAYERS · ONE DEVICE")
+                            Eyebrow(text: session.mode == .online ? "ONLINE · YOU ARE \(store.online.localPlayer.name.uppercased())" : (session.mode == .solo ? "YOU ARE CORAL" : "TWO PLAYERS · ONE DEVICE"))
                             Text(session.finished ? "Nice rush." : "Keep your eyes moving.")
                                 .font(.system(size: 23, weight: .black, design: .rounded)).tracking(-0.7)
                         }
@@ -47,9 +47,11 @@ struct GameScreen: View {
                             LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: gap), count: columns), spacing: gap) {
                                 ForEach(session.rounds) { round in
                                     BoardCard(round: round, duration: session.turnDuration,
-                                              now: context.date.timeIntervalSince1970,
+                                              now: store.displayTime(context.date.timeIntervalSince1970),
                                               solo: session.mode == .solo,
                                               compact: cardWidth < 250,
+                                              allowedPlayer: session.mode == .online ? store.online.localPlayer : nil,
+                                              pending: store.pendingBoards.contains(round.id),
                                               onFocus: { store.focusedBoard = round.id },
                                               onDrop: { store.drop(column: $0, boardID: round.id) })
                                 }
@@ -57,7 +59,7 @@ struct GameScreen: View {
                         }
                     }.frame(height: gridHeight(width: min(810, screen.size.width - 40)))
                     if session.finished {
-                        ResultsPanel(session: session) { store.start() }
+                        ResultsPanel(session: session, canRematch: session.mode != .online || store.online.isHost) { store.start() }
                     } else {
                         HStack(alignment: .top, spacing: 9) {
                             Image(systemName: "shuffle").foregroundStyle(Palette.lime)
@@ -119,10 +121,15 @@ struct BoardCard: View {
     let solo: Bool
     var compact = true
     var identifierPrefix = "board"
+    var allowedPlayer: Player?
+    var pending = false
     var onFocus: (() -> Void)?
     var onDrop: (Int) -> Void
     private var color: Color { round.board.outcome.winner?.color ?? round.board.turn.color }
-    private var canMove: Bool { !round.finished && !(solo && round.board.turn == .gold) }
+    private var canMove: Bool {
+        !round.finished && !pending && !(solo && round.board.turn == .gold)
+            && (allowedPlayer == nil || allowedPlayer == round.board.turn)
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 9) {
@@ -162,6 +169,7 @@ struct BoardCard: View {
     private var status: String {
         if let winner = round.board.outcome.winner { return "\(winner.name) wins!" }
         if round.finished { return "Draw. Well played." }
+        if pending { return "Sending move…" }
         if solo && round.board.turn == .gold { return "Gold is thinking…" }
         return "\(round.board.turn.name)’s turn"
     }
@@ -201,8 +209,10 @@ struct FocusedBoard: View {
                    let round = session.rounds.first(where: { $0.id == store.focusedBoard }) {
                     TimelineView(.animation(minimumInterval: 0.1, paused: round.finished)) { context in
                         BoardCard(round: round, duration: session.turnDuration,
-                                  now: context.date.timeIntervalSince1970,
+                                  now: store.displayTime(context.date.timeIntervalSince1970),
                                   solo: session.mode == .solo, compact: false, identifierPrefix: "focused",
+                                  allowedPlayer: session.mode == .online ? store.online.localPlayer : nil,
+                                  pending: store.pendingBoards.contains(round.id),
                                   onDrop: { store.drop(column: $0, boardID: round.id) })
                     }
                     Text("The other clocks are still running.").font(.callout).foregroundStyle(Palette.muted)
@@ -226,6 +236,7 @@ struct FocusedBoard: View {
 
 struct ResultsPanel: View {
     let session: Session
+    var canRematch = true
     let rematch: () -> Void
     private var title: String {
         let coral = session.wins(for: .coral), gold = session.wins(for: .gold)
@@ -239,8 +250,9 @@ struct ResultsPanel: View {
                 .accessibilityIdentifier("match-result")
             Text("\(session.timeoutCount) autopilot moves. Ready for another round?")
                 .font(.callout).foregroundStyle(Palette.muted)
-            PrimaryButton(title: "Run it back", symbol: "arrow.clockwise", action: rematch)
+            PrimaryButton(title: canRematch ? "Run it back" : "Waiting for Coral’s rematch", symbol: "arrow.clockwise", action: rematch)
                 .accessibilityIdentifier("rematch")
+                .disabled(!canRematch)
         }.padding(22).background(Palette.surface, in: RoundedRectangle(cornerRadius: 22))
     }
 }

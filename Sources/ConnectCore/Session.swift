@@ -1,8 +1,10 @@
 import Foundation
 
 public enum PlayMode: String, CaseIterable, Codable, Sendable {
-    case solo, local
-    public var title: String { self == .solo ? "Solo rush" : "Pass & play" }
+    case solo, local, online
+    public var title: String {
+        switch self { case .solo: return "Solo rush"; case .local: return "Local"; case .online: return "Online" }
+    }
 }
 
 public enum MoveSource: String, Codable, Sendable { case touch, timeout, computer }
@@ -115,6 +117,20 @@ public struct Session: Codable, Sendable {
         rounds[index].computerDue = mode == .solo && rounds[index].board.turn == .gold && !rounds[index].finished
             ? time + min(0.65, turnDuration * 0.25) : nil
         return played
+    }
+
+    /// The online host accepts arrival time, never a client-provided timestamp.
+    /// Expected move counts prevent retransmitted/stale intents playing a later turn.
+    @discardableResult
+    public mutating func submitMove<R: RandomNumberGenerator>(
+        player: Player, column: Int, boardID: Int, expectedMoveCount: Int,
+        at now: TimeInterval, using rng: inout R
+    ) -> [GameEvent] {
+        guard let round = rounds.first(where: { $0.id == boardID }),
+              round.board.turn == player, round.board.moveCount == expectedMoveCount else {
+            return advance(to: now, using: &rng)
+        }
+        return drop(column: column, boardID: boardID, at: now, using: &rng)
     }
 
     /// Saves are local and untrusted. Reject malformed histories or timer metadata.

@@ -61,19 +61,28 @@ struct SetupScreen: View {
                     HStack(spacing: 10) {
                         ForEach(PlayMode.allCases, id: \.self) { mode in
                             choiceButton(selected: store.mode == mode) { store.mode = mode } label: {
-                                Label(mode.title, systemImage: mode == .solo ? "bolt.fill" : "person.2.fill")
-                                    .font(.system(size: 13, weight: .bold))
+                                Label(mode.title, systemImage: mode == .solo ? "bolt.fill" : (mode == .online ? "globe" : "person.2.fill"))
+                                    .font(.system(size: 12, weight: .bold)).lineLimit(1).minimumScaleFactor(0.8)
                             }.accessibilityIdentifier("mode-\(mode.rawValue)")
                         }
                     }
+                }
+                if store.mode == .online {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text(store.online.error ?? store.online.status)
+                            .foregroundStyle(store.online.error == nil ? Palette.lime : Palette.coral)
+                        Text("The Coral player’s board and timer settings are used. Stay in the app during the match; leaving ends it.")
+                            .foregroundStyle(Palette.muted)
+                    }.font(.system(size: 12)).fixedSize(horizontal: false, vertical: true)
                 }
             }.padding(24).frame(maxWidth: 520)
                 .frame(maxWidth: .infinity)
         }
         .safeAreaInset(edge: .bottom, spacing: 0) {
             VStack(spacing: 10) {
-                PrimaryButton(title: "Let’s play", symbol: "arrow.right") { store.start() }
+                PrimaryButton(title: store.mode == .online ? (store.online.finding ? "Connecting…" : "Find a player") : "Let’s play", symbol: "arrow.right") { store.start() }
                     .accessibilityIdentifier("start-match")
+                    .disabled(store.online.finding || (store.mode == .online && store.online.connected))
                 Text("CORAL GOES FIRST · NO ACCOUNT. JUST PLAY.")
                     .font(.system(size: 9, weight: .bold, design: .monospaced)).foregroundStyle(Palette.muted)
             }.padding(.horizontal, 24).padding(.top, 12).padding(.bottom, 12)
@@ -133,6 +142,7 @@ struct RulesSheet: View {
                 rule("03", "Keep moving", "At zero, a random legal move happens automatically. The clocks keep running while you focus a board or leave the app, and missed moves are resolved when you return.")
                 rule("04", "Win the most boards", "Coral goes first. In solo rush, you play Coral against the Gold computer. In pass & play, share the device and take each board’s indicated turn. Most boards won takes the match; equal scores tie.")
                 rule("05", "Find your focus", "Tap a board’s expand button for larger controls. The other clocks keep running. Landscape gives four boards more room.")
+                rule("06", "Play live", "Choose Online to invite a friend or match through Game Center. You each control your own color on every board. The Coral player’s settings apply. Both players must stay in the app; leaving or disconnecting ends the match.")
             }.padding(24).frame(maxWidth: 600)
         }.foregroundStyle(Palette.ink).background(Palette.background)
             .preferredColorScheme(.dark)

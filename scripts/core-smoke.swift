@@ -65,3 +65,30 @@ for _ in 0..<1_000 {
 }
 print("1,000 complete four-board catch-ups passed in \(benchmarkStart.duration(to: .now))")
 print("PASS: win directions, draws, independent timers, input races, computer play, saves, and randomized games")
+
+var onlineHost = Session(boardCount: 4, turnDuration: 8, mode: .online, now: 100)
+var replica = OnlineReplica()
+let matchID = UUID()
+var revision = 0
+for step in 0...400 {
+    let now = 100 + Double(step)
+    onlineHost.advance(to: now, using: &rng)
+    for round in onlineHost.rounds where !round.finished && step % 3 == 0 {
+        onlineHost.submitMove(player: round.board.turn,
+                              column: round.board.computerColumn(using: &rng)!, boardID: round.id,
+                              expectedMoveCount: round.board.moveCount, at: now, using: &rng)
+    }
+    revision += 1
+    var packet = OnlinePacket(kind: .state)
+    packet.matchID = matchID
+    packet.revision = revision
+    packet.session = onlineHost
+    packet.sentAt = now
+    let data = try JSONEncoder().encode(packet)
+    check(replica.accept(OnlinePacket.decode(data)!, receivedAt: now - 20), "guest accepts current snapshot")
+    check(replica.session!.rounds == onlineHost.rounds, "host and guest match")
+    check(!replica.accept(packet, receivedAt: now - 20), "guest rejects duplicate revision")
+    if onlineHost.finished { break }
+}
+check(onlineHost.finished && replica.session!.finished, "online match completes on both peers")
+print("PASS: serialized four-board online match, clock skew, and duplicate snapshot rejection")

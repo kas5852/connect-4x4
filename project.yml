@@ -37,6 +37,7 @@ targets:
         MARKETING_VERSION: "1.0.0"
         CURRENT_PROJECT_VERSION: "1"
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        CODE_SIGN_ENTITLEMENTS: App/Connect4x4.entitlements
   Connect4x4UITests:
     type: bundle.ui-testing
     platform: iOS

@@ -15,7 +15,11 @@ public struct RootView: View {
         }.foregroundStyle(Palette.ink).background(Palette.background.ignoresSafeArea())
             .preferredColorScheme(.dark)
             .onAppear { store.setActive(true) }
-            .onChange(of: scenePhase) { _, phase in store.setActive(phase == .active) }
+            .onChange(of: scenePhase) { _, phase in
+                if phase == .background { store.enterBackground() }
+                store.setActive(phase == .active)
+            }
+            .modifier(OnlinePresentation(client: store.online))
     }
 }
 

@@ -6,6 +6,7 @@ mkdir -p .build/local
 swiftc -sdk "$task_sdk" -target arm64-apple-macosx14.0 -O \
   -parse-as-library -emit-library -emit-module -enable-testing -module-name ConnectCore \
   Sources/ConnectCore/*.swift -emit-module-path .build/local/ConnectCore.swiftmodule \
+  -Xlinker -install_name -Xlinker '@rpath/libConnectCore.dylib' \
   -o .build/local/libConnectCore.dylib
 swiftc -sdk "$task_sdk" -target arm64-apple-macosx14.0 -O \
   -I .build/local -L .build/local -lConnectCore -Xlinker -rpath -Xlinker "$(pwd)/.build/local" \
@@ -14,7 +15,8 @@ swiftc -sdk "$task_sdk" -target arm64-apple-macosx14.0 -O \
 swiftc -sdk "$task_sdk" -target arm64-apple-macosx14.0 \
   -parse-as-library -emit-library -emit-module -module-name ConnectUI \
   -I .build/local -L .build/local -lConnectCore Sources/ConnectUI/*.swift \
-  -emit-module-path .build/local/ConnectUI.swiftmodule -o .build/local/libConnectUI.dylib
+  -emit-module-path .build/local/ConnectUI.swiftmodule \
+  -Xlinker -install_name -Xlinker '@rpath/libConnectUI.dylib' -o .build/local/libConnectUI.dylib
 swiftc -sdk "$task_sdk" -target arm64-apple-macosx14.0 -parse-as-library \
   -I .build/local -L .build/local -lConnectCore -lConnectUI \
   -Xlinker -rpath -Xlinker "$(pwd)/.build/local" \
