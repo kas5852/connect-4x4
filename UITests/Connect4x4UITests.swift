@@ -41,7 +41,7 @@ final class Connect4x4UITests: XCTestCase {
             app.buttons["focus-board-0"].tap()
             XCTAssertTrue(app.buttons["close-focus"].waitForExistence(timeout: 3))
             app.buttons["focused-0-column-3"].tap()
-            XCTAssertEqual(app.staticTexts["focused-0-moves"].label, "1")
+            XCTAssertEqual(app.staticTexts["focused-0-moves"].label, "1 pieces played")
             app.buttons["close-focus"].tap()
             app.terminate()
         }
@@ -56,28 +56,28 @@ final class Connect4x4UITests: XCTestCase {
         let result = app.staticTexts["match-result"]
         reveal(result, in: app)
         XCTAssertTrue(result.label.contains("Coral takes"))
-        for board in 0..<4 { XCTAssertEqual(app.staticTexts["board-\(board)-moves"].label, "7") }
+        for board in 0..<4 { XCTAssertEqual(app.staticTexts["board-\(board)-moves"].label, "7 pieces played") }
         screenshot(app, name: "Completed four-board match")
         reveal(app.buttons["rematch"], in: app)
         app.buttons["rematch"].tap()
-        XCTAssertEqual(app.staticTexts["board-0-moves"].label, "0")
+        XCTAssertEqual(app.staticTexts["board-0-moves"].label, "0 pieces played")
     }
 
     func testTimerExpiryMakesLegalMovesWithoutInput() {
         let app = start(fast: true)
         let first = app.staticTexts["board-0-moves"]
-        let moved = NSPredicate(format: "label != '0'")
+        let moved = NSPredicate(format: "label != '0 pieces played'")
         expectation(for: moved, evaluatedWith: first)
         waitForExpectations(timeout: 8)
-        for board in 0..<4 { XCTAssertNotEqual(app.staticTexts["board-\(board)-moves"].label, "0") }
+        for board in 0..<4 { XCTAssertNotEqual(app.staticTexts["board-\(board)-moves"].label, "0 pieces played") }
         screenshot(app, name: "Autopilot after timeout")
     }
 
     func testSoloComputerRespondsAndOtherBoardStaysIndependent() {
         let app = start(count: 2, solo: true)
         app.buttons["board-0-column-3"].tap()
-        expectation(for: NSPredicate(format: "label == '2'"), evaluatedWith: app.staticTexts["board-0-moves"])
+        expectation(for: NSPredicate(format: "label == '2 pieces played'"), evaluatedWith: app.staticTexts["board-0-moves"])
         waitForExpectations(timeout: 5)
-        XCTAssertEqual(app.staticTexts["board-1-moves"].label, "0")
+        XCTAssertEqual(app.staticTexts["board-1-moves"].label, "0 pieces played")
     }
 }
