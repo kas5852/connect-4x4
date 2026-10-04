@@ -4,6 +4,7 @@ import SwiftUI
 struct GameScreen: View {
     @Bindable var store: GameStore
     let session: Session
+    var snapshotTime: TimeInterval?
     @State private var confirmExit = false
     @State private var showingRules = false
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -43,11 +44,11 @@ struct GameScreen: View {
                         let columns = session.rounds.count == 1 ? 1 : 2
                         let gap: CGFloat = 12
                         let cardWidth = (min(810, screen.size.width - 40) - CGFloat(columns - 1) * gap) / CGFloat(columns)
-                        TimelineView(.animation(minimumInterval: 0.1, paused: session.finished || store.focusedBoard != nil)) { context in
+                        TimelineView(.animation(minimumInterval: 0.1, paused: snapshotTime != nil || session.finished || store.focusedBoard != nil)) { context in
                             LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: gap), count: columns), spacing: gap) {
                                 ForEach(session.rounds) { round in
                                     BoardCard(round: round, duration: session.turnDuration,
-                                              now: store.displayTime(context.date.timeIntervalSince1970),
+                                              now: snapshotTime ?? store.displayTime(context.date.timeIntervalSince1970),
                                               solo: session.mode == .solo,
                                               compact: cardWidth < 250,
                                               allowedPlayer: session.mode == .online ? store.online.localPlayer : nil,

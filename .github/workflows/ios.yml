@@ -2,6 +2,7 @@ name: iOS build and end-to-end tests
 on:
   push:
     branches: [main]
+    paths-ignore: ['docs/**', 'README.md', 'LICENSE', '.gitignore']
   pull_request:
   workflow_dispatch:
 permissions:

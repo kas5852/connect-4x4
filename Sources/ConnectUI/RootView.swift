@@ -30,7 +30,9 @@ public struct AppSnapshot: View {
     @MainActor public init(store: GameStore, playing: Bool) { self.store = store; self.playing = playing }
     public var body: some View {
         Group {
-            if playing, let session = store.session { GameScreen(store: store, session: session) }
+            if playing, let session = store.session {
+                GameScreen(store: store, session: session, snapshotTime: session.lastAdvancedAt + 2)
+            }
             else { SetupScreen(store: store) }
         }.foregroundStyle(Palette.ink).background(Palette.background)
             .preferredColorScheme(.dark)

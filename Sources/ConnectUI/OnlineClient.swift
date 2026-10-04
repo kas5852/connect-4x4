@@ -115,7 +115,15 @@ public final class OnlineClient: NSObject {
         #if os(iOS)
         controller = nil
         #endif
-        if !connected { finding = false }
+        if !connected {
+            finding = false
+            #if os(iOS)
+            GKMatchmaker.shared().cancel()
+            match?.delegate = nil
+            match?.disconnect()
+            match = nil
+            #endif
+        }
     }
 
     private func close(message: String?) {
