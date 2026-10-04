@@ -1,0 +1,470 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		12E527E1B5FBAB1051390F5F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0494C5AAA01F11CA8EC6D085 /* Assets.xcassets */; };
+		4FB8E8A656C011791D3E8EC8 /* ConnectUI in Frameworks */ = {isa = PBXBuildFile; productRef = 5502D51863B61A2DA872C877 /* ConnectUI */; };
+		75993AA9F5514E1A8F88461F /* Connect4x4UITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FFBABE2E23137A78753AF7AE /* Connect4x4UITests.swift */; };
+		C100913648B4FD7049F80A2F /* Connect4x4App.swift in Sources */ = {isa = PBXBuildFile; fileRef = B724D0C8E16E27BB04C320F2 /* Connect4x4App.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		1FB774098107F7BFD682950A /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 37E97B48BF1D6281C7332AEB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D3FFEF820BDA279EA3405E86;
+			remoteInfo = Connect4x4;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		0494C5AAA01F11CA8EC6D085 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		6A2664CD9C32536DDE4FC531 /* connect-4x4 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = "connect-4x4"; path = .; sourceTree = SOURCE_ROOT; };
+		92398FD964194BD111418521 /* Connect4x4UITests.xctest */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.cfbundle; path = Connect4x4UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		AC90E4E945E0EA487ACFBAC4 /* Connect4x4.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = Connect4x4.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B724D0C8E16E27BB04C320F2 /* Connect4x4App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Connect4x4App.swift; sourceTree = "<group>"; };
+		FFBABE2E23137A78753AF7AE /* Connect4x4UITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Connect4x4UITests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		89DA0EE00415A64D7706934F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				4FB8E8A656C011791D3E8EC8 /* ConnectUI in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		170BB9BD03032BD1031896D1 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				6A2664CD9C32536DDE4FC531 /* connect-4x4 */,
+			);
+			name = Packages;
+			sourceTree = "<group>";
+		};
+		1D28B0785D7A4E9CF07D776C /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				AC90E4E945E0EA487ACFBAC4 /* Connect4x4.app */,
+				92398FD964194BD111418521 /* Connect4x4UITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		3FA884C9C458D99B72CE0B9C = {
+			isa = PBXGroup;
+			children = (
+				453BC5AB9176B76E1D48383A /* App */,
+				170BB9BD03032BD1031896D1 /* Packages */,
+				61458BE029CBA27C8B1C00A9 /* UITests */,
+				1D28B0785D7A4E9CF07D776C /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		453BC5AB9176B76E1D48383A /* App */ = {
+			isa = PBXGroup;
+			children = (
+				0494C5AAA01F11CA8EC6D085 /* Assets.xcassets */,
+				B724D0C8E16E27BB04C320F2 /* Connect4x4App.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		61458BE029CBA27C8B1C00A9 /* UITests */ = {
+			isa = PBXGroup;
+			children = (
+				FFBABE2E23137A78753AF7AE /* Connect4x4UITests.swift */,
+			);
+			path = UITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		83DA434CBFE2B8D51B35C30F /* Connect4x4UITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5A535EC574E230163EFAAF35 /* Build configuration list for PBXNativeTarget "Connect4x4UITests" */;
+			buildPhases = (
+				2CDD013D22319EF856AB688D /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				933F0FD6D7BD2C2C8814331E /* PBXTargetDependency */,
+			);
+			name = Connect4x4UITests;
+			packageProductDependencies = (
+			);
+			productName = Connect4x4UITests;
+			productReference = 92398FD964194BD111418521 /* Connect4x4UITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+		D3FFEF820BDA279EA3405E86 /* Connect4x4 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 37E90C2ADFA40E32C550AED9 /* Build configuration list for PBXNativeTarget "Connect4x4" */;
+			buildPhases = (
+				851FD1FFBD312BA82586429F /* Sources */,
+				85413DD5B08489FB40AA3743 /* Resources */,
+				89DA0EE00415A64D7706934F /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Connect4x4;
+			packageProductDependencies = (
+				5502D51863B61A2DA872C877 /* ConnectUI */,
+			);
+			productName = Connect4x4;
+			productReference = AC90E4E945E0EA487ACFBAC4 /* Connect4x4.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		37E97B48BF1D6281C7332AEB /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					83DA434CBFE2B8D51B35C30F = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+						TestTargetID = D3FFEF820BDA279EA3405E86;
+					};
+					D3FFEF820BDA279EA3405E86 = {
+						DevelopmentTeam = "";
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 902D884B15E7C5394F3AC7BD /* Build configuration list for PBXProject "Connect4x4" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = 3FA884C9C458D99B72CE0B9C;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				FC1F2EF8E243D7E66AB7F06A /* XCLocalSwiftPackageReference "." */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 1D28B0785D7A4E9CF07D776C /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D3FFEF820BDA279EA3405E86 /* Connect4x4 */,
+				83DA434CBFE2B8D51B35C30F /* Connect4x4UITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		85413DD5B08489FB40AA3743 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				12E527E1B5FBAB1051390F5F /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		2CDD013D22319EF856AB688D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				75993AA9F5514E1A8F88461F /* Connect4x4UITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		851FD1FFBD312BA82586429F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C100913648B4FD7049F80A2F /* Connect4x4App.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		933F0FD6D7BD2C2C8814331E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D3FFEF820BDA279EA3405E86 /* Connect4x4 */;
+			targetProxy = 1FB774098107F7BFD682950A /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		4F3B3658725082B7D3AC0975 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Connect 4x4";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.strategy-games";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.kas5852.Connect4x4;
+				PRODUCT_NAME = Connect4x4;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		8C9852F706C1DB0CE66CF597 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		AF0D94326083BB06FBCD6F1A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.kas5852.Connect4x4UITests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Connect4x4;
+			};
+			name = Debug;
+		};
+		C4967CED4C95C5CCC5B0913E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.kas5852.Connect4x4UITests;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Connect4x4;
+			};
+			name = Release;
+		};
+		E40BDFECF67450A3CF224AB2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "Connect 4x4";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.strategy-games";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.kas5852.Connect4x4;
+				PRODUCT_NAME = Connect4x4;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		F02548FEFAC7ABFBB1FFD9EF /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_STYLE = Automatic;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		37E90C2ADFA40E32C550AED9 /* Build configuration list for PBXNativeTarget "Connect4x4" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				4F3B3658725082B7D3AC0975 /* Debug */,
+				E40BDFECF67450A3CF224AB2 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		5A535EC574E230163EFAAF35 /* Build configuration list for PBXNativeTarget "Connect4x4UITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				AF0D94326083BB06FBCD6F1A /* Debug */,
+				C4967CED4C95C5CCC5B0913E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		902D884B15E7C5394F3AC7BD /* Build configuration list for PBXProject "Connect4x4" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8C9852F706C1DB0CE66CF597 /* Debug */,
+				F02548FEFAC7ABFBB1FFD9EF /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		FC1F2EF8E243D7E66AB7F06A /* XCLocalSwiftPackageReference "." */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = .;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		5502D51863B61A2DA872C877 /* ConnectUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ConnectUI;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 37E97B48BF1D6281C7332AEB /* Project object */;
+}
