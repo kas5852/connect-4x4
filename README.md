@@ -1,15 +1,20 @@
 # Connect 4x4
 
+[![iOS build and end-to-end tests](https://github.com/kas5852/connect-4x4/actions/workflows/ios.yml/badge.svg)](https://github.com/kas5852/connect-4x4/actions/workflows/ios.yml)
+
 Four boards. One brain. A native iPhone and iPad game where you play one to four games of Connect Four at once, with a separate turn clock on every board. Miss a deadline and autopilot drops a random legal piece for you.
 
 Built with SwiftUI and a standalone Swift rules engine. Play live through Game Center, practice against the computer, or share a device. No app-managed accounts, ads, analytics, custom backend, or third-party runtime dependencies. Online play uses Apple's Game Center account and networking. Open source under the MIT license.
 
 <p>
   <img src="docs/images/setup.png" width="270" alt="Connect 4x4 setup screen" />
-  <img src="docs/images/four-boards.png" width="270" alt="Four simultaneous game boards with independent clocks" />
+  <img src="docs/images/ios-four-boards.png" width="270" alt="Four simultaneous game boards running in the iPhone simulator" />
+  <img src="docs/images/ios-results.png" width="270" alt="Completed four-board match in the iPhone simulator" />
 </p>
 
-These previews render the real shared SwiftUI views on macOS. Simulator screenshots are attached to the UI test results in Actions.
+Setup is rendered from the shared SwiftUI views on macOS; gameplay and results are actual iPhone simulator captures from the automated UI tests. Those tests use a 60-second turn to make scripted moves reliable; normal presets are 8, 12, 20, and 30 seconds. See [the verification record](docs/VERIFICATION.md) for tested environments and the remaining live Game Center check.
+
+<img src="docs/images/ios-landscape.png" width="810" alt="All four boards stay visible in landscape on an iPhone simulator" />
 
 ## Play
 
@@ -35,11 +40,14 @@ Requires **iOS 17+** and **full Xcode 16+**. Apple's command-line tools alone do
 The checked-in project is generated from `project.yml`. After changing project configuration, regenerate it with `brew install xcodegen` and `xcodegen generate`.
 
 ```sh
+export DEVELOPER_DIR=/Applications/Xcode.app/Contents/Developer
 swift test --jobs 3
 xcodebuild test -project Connect4x4.xcodeproj -scheme Connect4x4 \
   -destination 'platform=iOS Simulator,name=<your installed iPhone>' \
   CODE_SIGNING_ALLOWED=NO
 ```
+
+`DEVELOPER_DIR` selects full Xcode for these commands without changing your Mac's global command-line tools selection. Adjust the path if Xcode is installed elsewhere.
 
 GitHub Actions selects an installed simulator, runs the engine suite and offline UI tests, then compiles a Release build for physical iOS devices without signing. It also tests serialized host/guest matches, stale requests, replayed packets, rematches, and clock skew in the shared online protocol. The simulator `.app` and `.xcresult` test evidence are downloadable as workflow artifacts. An unsigned simulator app is not installable on an iPhone. Game Center's live service requires Apple app configuration and a separate signed two-device check; CI does not certify that service. TestFlight/App Store distribution requires your Apple Developer account and signing.
 

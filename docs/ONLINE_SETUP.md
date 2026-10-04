@@ -12,6 +12,8 @@ The online implementation is included in the iOS app. Apple's service requires a
 
 Once the team is active, `python3 scripts/configure-apple.py --team YOURTEAMID --bundle-id io.github.kas5852.Connect4x4` sets both signing targets and regenerates the project. `--dry-run` previews the change. Sign into that team's Apple account in Xcode → Settings → Accounts so automatic provisioning can register the identifier and issue a development certificate. This script does not accept passwords, purchase membership, or submit an app for review.
 
+Find the 10-character Team ID by signing into [your Apple Developer account](https://developer.apple.com/account) and opening **Membership details**, as described in [Apple's Team ID help](https://developer.apple.com/help/glossary/team-id/). Enrollment must be active before the paid team is available for this setup. Do not put passwords, private signing keys, or provisioning profiles in the repository.
+
 The app record can use **Connect 4x4**, primary language **English (US)**, platform **iOS**, and SKU **connect4x4-ios-2026**. Its bundle ID must exactly match the project. A privacy manifest declares app-local UserDefaults access for offline saves; the app has no custom analytics or data-retention service.
 
 Apple's [real-time game sample](https://developer.apple.com/documentation/gamekit/creating-real-time-games) and [Game Center configuration guide](https://developer.apple.com/documentation/gamekit/initializing-and-configuring-game-center) describe the service setup. This is separate from publishing source to GitHub.
