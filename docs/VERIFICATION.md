@@ -2,6 +2,8 @@
 
 Application source: [`dc060dd`](https://github.com/kas5852/connect-4x4/commit/dc060dd). Checks completed October 4, 2026. Later documentation-only commits do not change the tested application.
 
+Signing follow-up: [`bbdddb7`](https://github.com/kas5852/connect-4x4/commit/bbdddb7) configures the owner's Apple team and UI-test bundle identifier without changing the engine or interface. A signed Debug build passed, its Game Center/team entitlements and code signature were verified, and it installed successfully on the owner's paired iPhone 16 Pro. Launch and device UI testing are waiting for the phone to be unlocked. App Store Connect registration and live two-account gameplay remain pending.
+
 The automated engine and offline gameplay checks passed in both environments below. Live Game Center matchmaking between signed devices is still pending Apple account/app configuration and has **not** been verified. This is a development preview, not a production readiness claim.
 
 | Check | GitHub Actions | Local Mac |
@@ -20,4 +22,4 @@ The five simulator UI tests cover a complete four-board match followed by result
 
 An optimized standalone engine smoke check completed 10,000 randomized games in about 0.09 seconds and 1,000 four-board catch-up sessions in about 0.12 seconds on this Mac. These timings measure engine work, not animation frame rate, network latency, or iPhone energy use.
 
-Before distribution, finish [Apple configuration and the two-device acceptance check](ONLINE_SETUP.md). Real matchmaking/authentication, signing/provisioning, disconnect behavior through Apple's service, physical-device frame time and touch latency, energy use, and VoiceOver usability remain unverified. GamePigeon integration is not implemented.
+Before distribution, finish [Apple configuration and the two-device acceptance check](ONLINE_SETUP.md). Real matchmaking/authentication, distribution signing, disconnect behavior through Apple's service, physical-device frame time and touch latency, energy use, and VoiceOver usability remain unverified. Development signing and installation are verified as recorded above. GamePigeon integration is not implemented.
