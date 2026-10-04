@@ -10,17 +10,27 @@ final class Connect4x4UITests: XCTestCase {
         let countButton = app.buttons["board-count-\(count)"]
         reveal(countButton, in: app)
         countButton.tap()
-        if solo { reveal(app.buttons["mode-solo"], in: app); app.buttons["mode-solo"].tap() }
+        if solo {
+            reveal(app.buttons["mode-solo"], in: app)
+            app.buttons["mode-solo"].tap()
+            XCTAssertTrue(app.buttons["mode-solo"].isSelected, "Solo must be selected before starting")
+        }
         let start = app.buttons["start-match"]
         reveal(start, in: app)
         start.tap()
         XCTAssertTrue(app.staticTexts["board-0-moves"].waitForExistence(timeout: 5))
+        if solo { XCTAssertTrue(app.staticTexts["YOU ARE CORAL"].exists, app.debugDescription) }
         return app
     }
 
     private func reveal(_ element: XCUIElement, in app: XCUIApplication) {
         for _ in 0..<6 {
-            if element.isHittable { return }
+            let start = app.buttons["start-match"]
+            let bottom = start.exists && element.identifier != "start-match"
+                ? start.frame.minY - 8 : app.frame.maxY - 24
+            // A partly covered button can report hittable while its center is
+            // under the sticky CTA. Scroll the whole target into view.
+            if element.isHittable && (element.identifier == "start-match" || element.frame.maxY < bottom) { return }
             app.swipeUp()
         }
         XCTAssertTrue(element.isHittable)
@@ -76,6 +86,7 @@ final class Connect4x4UITests: XCTestCase {
     func testSoloComputerRespondsAndOtherBoardStaysIndependent() {
         let app = start(count: 2, solo: true)
         app.buttons["board-0-column-3"].tap()
+        screenshot(app, name: "Solo after the first move")
         expectation(for: NSPredicate(format: "label == '2 pieces played'"), evaluatedWith: app.staticTexts["board-0-moves"])
         waitForExpectations(timeout: 5)
         XCTAssertEqual(app.staticTexts["board-1-moves"].label, "0 pieces played")

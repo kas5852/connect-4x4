@@ -29,6 +29,12 @@ jobs:
       - name: Choose an available iPhone simulator
         id: simulator
         run: python3 scripts/select-simulator.py >> "$GITHUB_OUTPUT"
+      - name: Build for physical iOS devices without signing
+        run: |
+          xcodebuild build \
+            -project Connect4x4.xcodeproj -scheme Connect4x4 \
+            -destination 'generic/platform=iOS' -configuration Release \
+            -derivedDataPath DerivedData CODE_SIGNING_ALLOWED=NO
       - name: iOS simulator end-to-end tests
         run: |
           xcodebuild test \
@@ -36,12 +42,14 @@ jobs:
             -destination 'platform=iOS Simulator,id=${{ steps.simulator.outputs.udid }}' \
             -derivedDataPath DerivedData -resultBundlePath test-results/iOS.xcresult \
             -parallel-testing-enabled NO CODE_SIGNING_ALLOWED=NO
-      - name: Build for physical iOS devices without signing
+      - name: Export simulator screenshots and summary
+        if: always()
+        continue-on-error: true
         run: |
-          xcodebuild build \
-            -project Connect4x4.xcodeproj -scheme Connect4x4 \
-            -destination 'generic/platform=iOS' -configuration Release \
-            -derivedDataPath DerivedData CODE_SIGNING_ALLOWED=NO
+          if test -d test-results/iOS.xcresult; then
+            xcrun xcresulttool export attachments --path test-results/iOS.xcresult --output-path test-results/attachments
+            xcrun xcresulttool get test-results summary --path test-results/iOS.xcresult > test-results/summary.json
+          fi
       - name: Save simulator build and test evidence
         if: always()
         uses: actions/upload-artifact@v4

@@ -51,6 +51,7 @@ public final class GameStore {
     }
 
     public func start() {
+        trace("start mode=\(mode.rawValue) boards=\(boardCount)")
         if mode == .online {
             if online.connected && online.isHost { beginOnline() }
             else { online.findMatch() }
@@ -94,6 +95,7 @@ public final class GameStore {
     }
 
     public func setActive(_ isActive: Bool) {
+        trace("active=\(isActive)")
         active = isActive
         timerTask?.cancel()
         if isActive { process(); schedule() } else { save() }
@@ -121,6 +123,7 @@ public final class GameStore {
         guard var game = session else { return }
         if game.mode == .online && !online.isHost { return }
         let events = game.advance(to: Date.now.timeIntervalSince1970, using: &rng)
+        trace("process events=\(events.count)")
         guard !events.isEmpty else { return }
         session = game
         if events.contains(where: { $0.played.source == .timeout }) {
@@ -132,6 +135,7 @@ public final class GameStore {
 
     /// One sleeping task for the next actual event, not four polling timers.
     private func schedule() {
+        trace("schedule active=\(active) mode=\(session?.mode.rawValue ?? "none")")
         timerTask?.cancel()
         guard active, let game = session, !game.finished else { return }
         guard game.mode != .online || online.isHost else { return }
@@ -198,5 +202,13 @@ public final class GameStore {
             self.pendingBoards.removeAll()
             self.focusedBoard = nil
         }
+    }
+
+    private func trace(_ message: String) {
+        #if DEBUG
+        if ProcessInfo.processInfo.arguments.contains("--ui-testing") {
+            print("[connect-tests] \(message)")
+        }
+        #endif
     }
 }
