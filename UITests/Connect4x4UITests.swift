@@ -1,4 +1,5 @@
 import XCTest
+import UIKit
 
 final class Connect4x4UITests: XCTestCase {
     override func setUpWithError() throws { continueAfterFailure = false }
@@ -81,6 +82,35 @@ final class Connect4x4UITests: XCTestCase {
         waitForExpectations(timeout: 8)
         for board in 0..<4 { XCTAssertNotEqual(app.staticTexts["board-\(board)-moves"].label, "0 pieces played") }
         screenshot(app, name: "Autopilot after timeout")
+    }
+
+    func testDroppedPieceStaysVisibleAfterAnimation() throws {
+        let app = start(count: 1)
+        let column = app.buttons["board-0-column-3"]
+        let frame = column.frame
+        column.tap()
+        XCTAssertEqual(app.staticTexts["board-0-moves"].label, "1 pieces played")
+        // Inspect the settled board, after the temporary falling view is gone.
+        Thread.sleep(forTimeInterval: 1)
+        let image = try XCTUnwrap(app.screenshot().image.cgImage)
+        let scale = CGFloat(image.width) / app.frame.width
+        let point = CGPoint(x: frame.midX + frame.width * 0.2,
+                            y: frame.maxY - frame.width / 2)
+        let pixel = try XCTUnwrap(image.cropping(to: CGRect(
+            x: point.x * scale, y: point.y * scale, width: 1, height: 1)))
+        var rgba = [UInt8](repeating: 0, count: 4)
+        let sampled = rgba.withUnsafeMutableBytes { bytes -> Bool in
+            guard let context = CGContext(data: bytes.baseAddress, width: 1, height: 1,
+                bitsPerComponent: 8, bytesPerRow: 4, space: CGColorSpaceCreateDeviceRGB(),
+                bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) else { return false }
+            context.draw(pixel, in: CGRect(x: 0, y: 0, width: 1, height: 1))
+            return true
+        }
+        XCTAssertTrue(sampled)
+        screenshot(app, name: "Piece remains visible after landing")
+        XCTAssertGreaterThan(rgba[0], 170, "The bottom cell must show Coral, not an empty hole: \(rgba)")
+        XCTAssertGreaterThan(Double(rgba[0]), Double(rgba[1]) * 1.4)
+        XCTAssertGreaterThan(Double(rgba[0]), Double(rgba[2]) * 1.3)
     }
 
     func testLandscapeKeepsAllBoardsVisibleAndFocusPlayable() {

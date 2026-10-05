@@ -11,7 +11,6 @@ struct BoardSurface: View, Equatable {
     var onDrop: (Int) -> Void = { _ in }
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var fallingMove: Move?
-    @State private var fallOffset: CGFloat = 0
 
     static func == (lhs: Self, rhs: Self) -> Bool {
         lhs.board == rhs.board && lhs.lastMove == rhs.lastMove &&
@@ -21,6 +20,7 @@ struct BoardSurface: View, Equatable {
     var body: some View {
         GeometryReader { geometry in
             let cell = geometry.size.width / 7
+            let fallingIndex = fallingMove?.index
             Canvas { context, size in
                 let diameter = cell * 0.77
                 for row in 0..<6 {
@@ -31,7 +31,7 @@ struct BoardSurface: View, Equatable {
                         let rect = CGRect(x: center.x - diameter / 2, y: center.y - diameter / 2,
                                           width: diameter, height: diameter)
                         let path = Path(ellipseIn: rect)
-                        if let player = board.cells[index], fallingMove?.index != index {
+                        if let player = board.cells[index], fallingIndex != index {
                             context.fill(path, with: .linearGradient(
                                 Gradient(colors: [player.color, player.color.opacity(0.8)]),
                                 startPoint: CGPoint(x: center.x, y: rect.minY),
@@ -58,24 +58,25 @@ struct BoardSurface: View, Equatable {
                         if board.outcome.winningCells.contains(index) {
                             context.stroke(Path(ellipseIn: rect.insetBy(dx: 2, dy: 2)),
                                            with: .color(.white), lineWidth: 2)
-                        } else if lastMove?.index == index && fallingMove == nil {
+                        } else if lastMove?.index == index && fallingIndex == nil {
                             context.stroke(Path(ellipseIn: rect.insetBy(dx: 2, dy: 2)),
                                            with: .color(.white.opacity(0.7)), lineWidth: 1.5)
                         }
                     }
                 }
             }
+            // Canvas can retain its drawing after the overlay's state changes.
+            // Replace it at takeoff/landing so the settled cell is drawn again.
+            .id(fallingIndex)
             .accessibilityHidden(true)
             if let move = fallingMove {
-                Circle().fill(move.player.color.gradient)
-                    .overlay {
-                        Image(systemName: move.player.symbol)
-                            .font(.system(size: cell * 0.15)).foregroundStyle(Palette.background.opacity(0.4))
-                    }
-                    .frame(width: cell * 0.77, height: cell * 0.77)
+                FallingPiece(move: move, cell: cell) {
+                    if fallingMove == move { fallingMove = nil }
+                }
+                    .id(move.index)
                     .position(x: cell * (Double(move.column) + 0.5),
                               y: cell * (Double(move.row) + 0.5))
-                    .offset(y: fallOffset).accessibilityHidden(true)
+                    .accessibilityHidden(true)
             }
             if interactive {
                 HStack(spacing: 0) {
@@ -95,12 +96,8 @@ struct BoardSurface: View, Equatable {
             Color.clear.allowsHitTesting(false).onChange(of: lastMove) { _, newMove in
                 guard let move = newMove, !reduceMotion else { fallingMove = nil; return }
                 fallingMove = move
-                fallOffset = -cell * CGFloat(move.row + 1)
-                withAnimation(.spring(response: 0.28, dampingFraction: 0.78)) { fallOffset = 0 }
-                Task { @MainActor in
-                    try? await Task.sleep(for: .milliseconds(400))
-                    if fallingMove == move { fallingMove = nil }
-                }
+            }.onChange(of: reduceMotion) { _, reduced in
+                if reduced { fallingMove = nil }
             }
         }
         .clipped()
@@ -116,5 +113,38 @@ struct BoardSurface: View, Equatable {
             board[row, column].map { "row \(row + 1) \($0.name)" }
         }
         return contents.isEmpty ? "Empty" : contents.joined(separator: ", ")
+    }
+}
+
+/// Mount the piece above the board before animating its position. Starting the
+/// animation while creating the overlay can coalesce both positions into one
+/// update. A new move gets fresh state; removing the view cancels its task.
+private struct FallingPiece: View {
+    let move: Move
+    let cell: CGFloat
+    let onLanded: () -> Void
+    @State private var landed = false
+
+    var body: some View {
+        Circle().fill(move.player.color.gradient)
+            .overlay {
+                Image(systemName: move.player.symbol)
+                    .font(.system(size: cell * 0.15))
+                    .foregroundStyle(Palette.background.opacity(0.4))
+            }
+            .frame(width: cell * 0.77, height: cell * 0.77)
+            .offset(y: landed ? 0 : -cell * CGFloat(move.row + 1))
+            .task {
+                do {
+                    try await Task.sleep(for: .milliseconds(16))
+                    withAnimation(.spring(response: 0.28, dampingFraction: 0.78)) {
+                        landed = true
+                    }
+                    try await Task.sleep(for: .milliseconds(400))
+                    onLanded()
+                } catch {
+                    // A new move or leaving the board cancels this animation.
+                }
+            }
     }
 }
