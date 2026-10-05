@@ -57,7 +57,7 @@ GitHub Actions selects an installed simulator, runs the engine suite and offline
 - `ConnectUI`: setup, game, focus, rules, score, and results screens. One task sleeps until the next move deadline or computer move. Countdown display refreshes at 10 Hz; unchanged Canvas boards sit behind an equatable boundary.
 - `ConnectUI/OnlineClient.swift`: Game Center authentication, invitations, two-player matchmaking, reliable packets, handshake retries, clock calibration, and connection lifecycle. The guest sends move intents and never runs its own timeout engine.
 - `Tests/ConnectCoreTests`: win directions, draws, gravity, full columns, deadline ties, independent clocks, catch-up, invalid saves, computer ownership, 10,000 randomized games, an online host/guest match, stale intents/packets, clock skew, and a catch-up benchmark.
-- `UITests`: setup for 1–4 boards, focused input, a complete four-board match, results/rematch, timeout moves, the solo opponent, and landscape overview/focus.
+- `UITests`: setup for 1–4 boards, focused input, a complete four-board match, results/rematch, timeout moves, the solo opponent, landscape overview/focus, and screenshot-based checks that human and computer pieces stay visible after landing.
 
 Pieces have distinct center marks as well as colors. Each playable column exposes its stack to VoiceOver. Compact four-board columns on small portrait phones are narrower than a 44-point target; the focus view provides larger columns on standard-size phones. Rules and settings scroll at large text sizes. Physical-device frame time, energy use, VoiceOver usability, and real-world touch latency still need device verification before calling the app production-ready.
 

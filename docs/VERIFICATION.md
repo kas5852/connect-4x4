@@ -4,6 +4,12 @@ Application source: [`dc060dd`](https://github.com/kas5852/connect-4x4/commit/dc
 
 Signing follow-up: [`bbdddb7`](https://github.com/kas5852/connect-4x4/commit/bbdddb7) configures the owner's Apple team and UI-test bundle identifier without changing the engine or interface. A signed Debug build passed, its Game Center/team entitlements and code signature were verified, and it installed successfully on the owner's paired iPhone 16 Pro. Launch and device UI testing are waiting for the phone to be unlocked. App Store Connect registration and live two-account gameplay remain pending.
 
+October 5 follow-up: the October 4 physical-device run eventually started and passed four of its five tests (setup/focus, landscape/focus, solo response, and timeouts). The complete-match test failed before reaching gameplay while the phone's app switcher was open; its recording confirms an interrupted launch/input sequence. This is not a complete passing device run.
+
+The owner's report of flickering computer drops led to a reproduced rendering bug: Canvas could keep drawing an empty hole after the falling-piece overlay disappeared. [`3c606dc`](https://github.com/kas5852/connect-4x4/commit/3c606dc) redraws the surface at takeoff/landing and gives each falling piece independent, cancellable animation state. A screenshot-based regression test failed before the redraw fix with the sampled hole color `[16, 29, 46, 255]`, then passed after it. All six iOS 27 simulator UI tests passed. The extended solo test also passed visual checks for both the player's Coral piece and the computer's Gold piece after their animations had ended; [its screenshot](images/settled-computer-move.png) records the settled board.
+
+The patched, signed Release build passed and installed on the paired iPhone. The attempted physical rendering regression check was cancelled at Xcode's locked-device preflight, before any test ran. The updated visuals have been verified in the simulator; the owner can try the installed patch on the phone. The computer's deliberate 0.65-second response pause is unchanged. App Store Connect redirected to sign-in during team selection; app registration, Game Center live validation, TestFlight, and App Store submission remain pending.
+
 The automated engine and offline gameplay checks passed in both environments below. Live Game Center matchmaking between signed devices is still pending Apple account/app configuration and has **not** been verified. This is a development preview, not a production readiness claim.
 
 | Check | GitHub Actions | Local Mac |

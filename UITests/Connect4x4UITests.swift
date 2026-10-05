@@ -87,15 +87,23 @@ final class Connect4x4UITests: XCTestCase {
     func testDroppedPieceStaysVisibleAfterAnimation() throws {
         let app = start(count: 1)
         let column = app.buttons["board-0-column-3"]
-        let frame = column.frame
         column.tap()
         XCTAssertEqual(app.staticTexts["board-0-moves"].label, "1 pieces played")
         // Inspect the settled board, after the temporary falling view is gone.
         Thread.sleep(forTimeInterval: 1)
+        let rgba = try cellColor(in: app, column: column, row: 6)
+        screenshot(app, name: "Piece remains visible after landing")
+        XCTAssertGreaterThan(rgba[0], 170, "The bottom cell must show Coral, not an empty hole: \(rgba)")
+        XCTAssertGreaterThan(Double(rgba[0]), Double(rgba[1]) * 1.4)
+        XCTAssertGreaterThan(Double(rgba[0]), Double(rgba[2]) * 1.3)
+    }
+
+    private func cellColor(in app: XCUIApplication, column: XCUIElement, row: Int) throws -> [UInt8] {
+        let frame = column.frame
         let image = try XCTUnwrap(app.screenshot().image.cgImage)
         let scale = CGFloat(image.width) / app.frame.width
         let point = CGPoint(x: frame.midX + frame.width * 0.2,
-                            y: frame.maxY - frame.width / 2)
+                            y: frame.minY + (CGFloat(row) - 0.5) * frame.width)
         let pixel = try XCTUnwrap(image.cropping(to: CGRect(
             x: point.x * scale, y: point.y * scale, width: 1, height: 1)))
         var rgba = [UInt8](repeating: 0, count: 4)
@@ -107,10 +115,7 @@ final class Connect4x4UITests: XCTestCase {
             return true
         }
         XCTAssertTrue(sampled)
-        screenshot(app, name: "Piece remains visible after landing")
-        XCTAssertGreaterThan(rgba[0], 170, "The bottom cell must show Coral, not an empty hole: \(rgba)")
-        XCTAssertGreaterThan(Double(rgba[0]), Double(rgba[1]) * 1.4)
-        XCTAssertGreaterThan(Double(rgba[0]), Double(rgba[2]) * 1.3)
+        return rgba
     }
 
     func testLandscapeKeepsAllBoardsVisibleAndFocusPlayable() {
@@ -128,12 +133,28 @@ final class Connect4x4UITests: XCTestCase {
         app.buttons["close-focus"].tap()
     }
 
-    func testSoloComputerRespondsAndOtherBoardStaysIndependent() {
+    func testSoloComputerRespondsAndOtherBoardStaysIndependent() throws {
         let app = start(count: 2, solo: true)
         app.buttons["board-0-column-3"].tap()
         screenshot(app, name: "Solo after the first move")
         expectation(for: NSPredicate(format: "label == '2 pieces played'"), evaluatedWith: app.staticTexts["board-0-moves"])
         waitForExpectations(timeout: 5)
         XCTAssertEqual(app.staticTexts["board-1-moves"].label, "0 pieces played")
+        Thread.sleep(forTimeInterval: 1)
+        let goldIndex = try XCTUnwrap((0..<7).first { index in
+            (app.buttons["board-0-column-\(index)"].value as? String)?.contains("Gold") == true
+        })
+        let goldColumn = app.buttons["board-0-column-\(goldIndex)"]
+        let stack = try XCTUnwrap(goldColumn.value as? String)
+        let entry = try XCTUnwrap(stack.components(separatedBy: ", ").first { $0.contains("Gold") })
+        let goldRow = try XCTUnwrap(Int(entry.split(separator: " ")[1]))
+        let gold = try cellColor(in: app, column: goldColumn, row: goldRow)
+        screenshot(app, name: "Computer piece remains visible after landing")
+        XCTAssertGreaterThan(gold[0], 170, "The computer's piece must remain visible: \(gold)")
+        XCTAssertGreaterThan(gold[1], 140)
+        XCTAssertLessThan(gold[2], 160)
+        let coral = try cellColor(in: app, column: app.buttons["board-0-column-3"], row: 6)
+        XCTAssertGreaterThan(coral[0], 170, "The player's piece must also stay visible: \(coral)")
+        XCTAssertGreaterThan(Double(coral[0]), Double(coral[1]) * 1.4)
     }
 }
